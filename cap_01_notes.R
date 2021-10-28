@@ -25,3 +25,11 @@ abline(coef(M1), col = "gray")
 print(M1)
 
 # 3.9 percentual error
+
+
+42 + qnorm(c(.025, .975)) * 12
+42 - 1.96 * 12
+42 + 1.96 * 12
+
+
+
