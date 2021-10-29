@@ -46,7 +46,9 @@ print(fit_2)
 R2 <- 1 - sigma(fit_2)^2 / sd(earnings$earnk)^2
 R2
 
-
+# it would be inappropriate to say that the estimated “effect of sex” is $10 600. 
+# Better to say that, when comparing two people with the same height but different sex, 
+# the man’s earnings will be, on average, $10 600 more than the woman’s in the fitted model.
 
 
 
