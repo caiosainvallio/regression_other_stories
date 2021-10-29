@@ -34,3 +34,20 @@ text(x_bar, a_hat + b_hat*x_bar,
 
 
 
+
+# intrerpret coefficients as comparison, not effects
+earnings <- read.csv("https://raw.githubusercontent.com/avehtari/ROS-Examples/master/Earnings/data/earnings.csv")
+
+earnings$earnk = earnings$earn / 1e3
+
+fit_2 <- stan_glm(earnk ~ height + male, data = earnings)
+print(fit_2)
+
+R2 <- 1 - sigma(fit_2)^2 / sd(earnings$earnk)^2
+R2
+
+
+
+
+
+
