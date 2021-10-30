@@ -16,3 +16,14 @@ stan_glm(y ~ x, data=data, prior_intercept=NULL, prior=NULL, prior_aux=NULL)
 stan_glm(y ~ x, data=data, prior_intercept=NULL, prior=NULL, prior_aux=NULL, algotithm="optimizing")
 
 
+# Confidence intervals, uncertainty intervals, compatibility intervals
+library(rstanarm)
+x <- 1:10
+y <- c(1, 1, 2, 3, 5, 8, 13, 21, 34, 55)
+fake <- data.frame(x, y)
+fit <- stan_glm(y ~ x, data=fake)
+print(fit)
+
+sims <- as.matrix(fit)
+quantile(sims[,"x"], c(0.025, 0.975))
+
