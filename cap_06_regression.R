@@ -53,3 +53,25 @@ R2
 
 
 
+
+# How regression to the mean can confuse people about causal inference
+
+n <- 1e3
+true_ability <- rnorm(n, 50, 10)
+noise_1 <- rnorm(n, 0, 10)
+noise_2 <- rnorm(n, 0, 10)
+midterm <- true_ability + noise_1
+final <- true_ability + noise_2
+exams <- data.frame(midterm, final)
+
+fit_1 <- stan_glm(final ~ midterm, data=exams)
+plot(midterm, final, xlab="Midterm exam score", ylab="Final exam score")
+abline(coef(fit_1))
+fit_1
+
+
+
+
+
+
+
