@@ -8,7 +8,7 @@ data("kidiq")
 
 
 
-# add a binary predictor -------------------------------------------------------
+# Add a binary predictor -------------------------------------------------------
 fit_1 <- stan_glm(kid_score ~ mom_hs, data=kidiq)
 fit_1    # kid_score = 78 + 12*mom_hs + error
 
@@ -22,7 +22,7 @@ ggplot(kidiq, aes(factor(mom_hs), kid_score)) +
 
 
 
-# add a continuous predictor ----------------------------------------------------
+# Add a continuous predictor ----------------------------------------------------
 fit_2 <- stan_glm(kid_score ~ mom_iq, data=kidiq)
 fit_2    # kid_score = 26 + 0.6∗mom_iq + error
 
@@ -36,7 +36,7 @@ ggplot(kidiq, aes(mom_iq, kid_score)) +
 
 
 
-# including booth predictors ---------------------------------------------------
+# Including booth predictors ---------------------------------------------------
 fit_3 <- stan_glm(kid_score ~ mom_hs + mom_iq, data=kidiq)
 fit_3    # kid_score = 26 + 6∗mom_hs + 0.6*mom_iq + error
 
@@ -156,7 +156,7 @@ cat("Predicted weight for a 66-inch-tall person is",
 
 
 
-# centering a predictor --------------------------------------------------------
+# Centering a predictor --------------------------------------------------------
 # to improve interpretation
 
 earnings$c_height <- earnings$height - 66
@@ -191,6 +191,46 @@ cat("Predicted weight for a 70-inch-tall woman is",
 
 
 
+
+
+# Using indicator variables for multiple levels of a categorical predictor -----
+table(earnings$ethnicity)
+
+fit_4 <- stan_glm(weight ~ c_height + male + factor(ethnicity), data=earnings)
+fit_4
+# factor(ethnicity)Hispanic  -6.2
+# factor(ethnicity)Other    -12.4
+# factor(ethnicity)White     -5.2
+
+
+
+
+
+
+
+# Changing the baseline factor level -------------------------------------------
+earnings$eth <- factor(earnings$ethnicity,
+                       levels=c("White", "Black", "Hispanic", "Other"))
+fit_5 <- stan_glm(weight ~ c_height + male + eth, data=earnings)
+fit_5
+# ethBlack      5.2
+# ethHispanic  -1.0
+# ethOther     -7.2
+
+
+
+# Dummy variable ---------------------------------------------------------------
+earnings$eth_white <- ifelse(earnings$ethnicity=="White", 1, 0)
+earnings$eth_black <- ifelse(earnings$ethnicity=="Black", 1, 0)
+earnings$eth_hispanic <- ifelse(earnings$ethnicity=="Hispanic", 1, 0)
+earnings$eth_other <- ifelse(earnings$ethnicity=="Other", 1, 0)
+
+fit_6 <- stan_glm(weight ~ height + male + eth_black + eth_hispanic + eth_other,
+                  data=earnings)
+fit_6
+# eth_black       5.1
+# eth_hispanic   -0.9
+# eth_other      -7.0
 
 
 
