@@ -122,3 +122,80 @@ ggplot(kidiq, aes(mom_iq, kid_score)) +
 # médio
 
 
+
+
+
+
+# Indicator variables ----------------------------------------------------------
+
+# data set
+URL = "https://raw.githubusercontent.com/avehtari/ROS-Examples/master/Earnings/data/earnings.csv"
+earnings <- read.csv(URL)
+
+fit_1 <- stan_glm(weight ~ height, data=earnings)
+fit_1    # weight = -173.7 + 5*height + error
+
+# predict weight of a person with 66 pounds
+coefs_1 <- coef(fit_1)
+predicted_1 <- coefs_1[1] + coefs_1[2]*66
+predicted_1
+
+# or we can simply use `posterior_predict`
+new <- data.frame(height=66)
+pred <- posterior_predict(fit_1, newdata = new)
+
+cat("Predicted weight for a 66-inch-tall person is", 
+    round(mean(pred)),
+    "pounds with a sd of", 
+    round(sd(pred)), 
+    "\n")
+# Predicted weight for a 66-inch-tall person is 153 pounds with a sd of 29
+
+
+
+
+
+
+# centering a predictor --------------------------------------------------------
+# to improve interpretation
+
+earnings$c_height <- earnings$height - 66
+fit_2 <- stan_glm(weight ~ c_height, data=earnings)
+fit_2 # (intercept)=153.4, sigma=28.9
+
+
+# Including a binary variable in a regression ----------------------------------
+# including an indicator variable for sex
+
+fit_3 <- stan_glm(weight ~ c_height + male, data=earnings)
+fit_3    # male=11.8
+# comparing a man to woman of the same height, the man will be 
+# predicted to be 12 pounds heavier.
+
+
+# predicted weight for a 70-inch-tall woman
+coefs_3 <- coef(fit_3)
+predicted <- coefs_3[1] + coefs_3[2]*3.9 + coefs_3[3]*0
+
+# or using `posterior_predict`
+new <- data.frame(c_height=3.9, male=0)
+pred <- posterior_predict(fit_3, newdata=new)
+cat("Predicted weight for a 70-inch-tall woman is", 
+    round(mean(pred)),
+    "pounds with a sd of", 
+    round(sd(pred)), 
+    "\n")
+# Predicted weight for a 70-inch-tall woman is 164 pounds with a sd of 29
+
+
+
+
+
+
+
+
+
+
+
+
+
