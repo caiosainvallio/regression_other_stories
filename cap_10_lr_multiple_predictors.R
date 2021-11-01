@@ -239,3 +239,31 @@ fit_6
 
 
 
+
+
+
+# Uncertainty in predicting congressional elections ----------------------------
+
+# data set
+URL <- "https://raw.githubusercontent.com/avehtari/ROS-Examples/master/Congress/data/congress.csv"
+congress <- read.csv(URL)
+
+data88 <- data.frame(vote=congress$v88_adj, 
+                     past_vote=congress$v86_adj, 
+                     inc=congress$inc88)
+fit88 <- stan_glm(vote ~ past_vote + inc, data=data88)
+fit88
+
+
+
+
+
+
+
+
+
+
+
+
+
+
