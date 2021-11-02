@@ -255,9 +255,12 @@ fit88 <- stan_glm(vote ~ past_vote + inc, data=data88)
 fit88
 
 
+# Simulation for inferences and predictions of new data points -----------------
+sims88 <- as.matrix(fit88)
 
 
-
+data90 <- data.frame(past_vote=congress$v88_adj, inc=congress$inc90)
+pred90 <- posterior_predict(fit88, newdata=data90)
 
 
 
