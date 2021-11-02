@@ -140,6 +140,53 @@ for (i in 0:1){
 
 
 
+# Forming a linear predictor from a multiple regression ------------------------
+# extend the previous example so that the treatment indicator z is accompanied 
+# by k pre-treatment predictors x_k , k = 1,..., K:
+# y = b_0 + b_1*x_1 + ... + b_k*x_k + theta*z + error
+
+N <- 100
+K <- 10
+X <- array(runif(N*K, 0, 1), c(N, K))
+z <- sample(c(0, 1), N, replace=TRUE)
+a <- 1
+b <- 1:K
+theta <- 10
+sigma <- 5
+y <- a + X %*% b + theta*z +  rnorm(N, 0, sigma)
+fake <- data.frame(X=X, y=y, z=z)
+
+fit <- stan_glm(y ~ X + z, data=fake)
+fit
+
+
+# Outcome plotted vs. fitted linear predictor y_hat
+# for control and treatment groups:
+y_hat <- predict(fit)
+par(mfrow=c(1,2), mar=c(3,3,2,2), mgp=c(1.7,.5,0), tck=-.01)
+par(mfrow=c(1,2), pty="s")
+for (i in 0:1){
+  plot(range(y_hat,y), 
+       range(y_hat,y), 
+       type="n", 
+       xlab=expression(paste("Linear predictor, ", hat(y))), 
+       ylab="Outcome, y", main=paste("z =", i), bty="l")
+  points(y_hat[z==i], y[z==i], pch=20+i)
+  abline(0, 1)
+}
+
+# the residual, r = y − y_hat, vs. the fitted linear predictor y
+# for control and treatment groups:
+r <- y - y_hat
+par(mfrow=c(1,2), mar=c(3,3,2,2), mgp=c(1.7,.5,0), tck=-.01)
+par(mfrow=c(1,2))
+for (i in 0:1){
+  plot(range(y_hat), range(r), type="n", xlab=expression(paste("Linear predictor, ", hat(y))), ylab="Residual, r", main=paste("z =", i), bty="l")
+  points(y_hat[z==i], r[z==i], pch=20+i)
+  abline(0, 0)
+}
+
+
 
 
 
