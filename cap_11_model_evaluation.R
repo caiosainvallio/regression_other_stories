@@ -181,7 +181,11 @@ r <- y - y_hat
 par(mfrow=c(1,2), mar=c(3,3,2,2), mgp=c(1.7,.5,0), tck=-.01)
 par(mfrow=c(1,2))
 for (i in 0:1){
-  plot(range(y_hat), range(r), type="n", xlab=expression(paste("Linear predictor, ", hat(y))), ylab="Residual, r", main=paste("z =", i), bty="l")
+  plot(range(y_hat), 
+       range(r), 
+       type="n", 
+       xlab=expression(paste("Linear predictor, ", hat(y))), 
+       ylab="Residual, r", main=paste("z =", i), bty="l")
   points(y_hat[z==i], r[z==i], pch=20+i)
   abline(0, 0)
 }
@@ -189,7 +193,7 @@ for (i in 0:1){
 
 
 
-
+# Residual plots ---------------------------------------------------------------
 
 
 
