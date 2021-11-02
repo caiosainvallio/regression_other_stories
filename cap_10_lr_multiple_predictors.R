@@ -255,6 +255,8 @@ fit88 <- stan_glm(vote ~ past_vote + inc, data=data88)
 fit88
 
 
+
+
 # Simulation for inferences and predictions of new data points -----------------
 sims88 <- as.matrix(fit88)
 
@@ -266,7 +268,16 @@ pred90 <- posterior_predict(fit88, newdata=data90)
 
 
 
+# Predictive simulation for a nonlinear function of new data -------------------
 
+dems_pred <- rowSums(pred90 > 0.5)
+n_sims <- 4000
+dems_pred <- rep(NA, n_sims)
+for (s in 1:n_sims){
+  dems_pred[s] <- sum(pred90[s, ] > 0.5)
+}
 
+summary(dems_pred)
+sd(dems_pred)
 
 
