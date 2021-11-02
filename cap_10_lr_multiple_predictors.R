@@ -281,3 +281,14 @@ summary(dems_pred)
 sd(dems_pred)
 
 
+# outcomes           ~ predictors           -> ok
+# dependent variable ~ independent variable -> not ok
+
+
+
+
+
+
+
+
+
