@@ -288,3 +288,59 @@ ppc_stat(newcomb$y, y_rep, stat = "min", binwidth = 2)
 
 
 
+
+
+# Time Series ------------------------------------------------------------------
+URL <- "https://raw.githubusercontent.com/avehtari/ROS-Examples/master/Unemployment/data/unemp.txt"
+unemp <- read.table(URL, header=TRUE)
+
+
+## Fit a 1st-order autogregression ---------------------------------------------
+n <- nrow(unemp)
+unemp$y_lag <- c(NA, unemp$y[1:(n-1)])
+fit_lag <- stan_glm(y ~ y_lag, data=unemp)
+print(fit_lag, digits=2)
+
+
+## Simulate replicated datasets "manually" -------------------------------------
+sims <- as.matrix(fit_lag)
+n_sims <- nrow(sims)
+y_rep <- array(NA, c(n_sims, n))
+for (s in 1:n_sims){
+  y_rep[s,1] <- unemp$y[1]
+  for (t in 2:n){
+    y_rep[s,t] <- sims[s,"(Intercept)"] 
+                  + sims[s,"y_lag"] * y_rep[s,t-1] 
+                  + rnorm(1, 0, sims[s,"sigma"])
+  }
+}
+
+par(mar=c(1,1,3,.1), mgp=c(2,.5,0), tck=-.01)
+par(mfrow=c(3,5))
+for (s in sort(sample(n_sims, 15))){
+  plot (unemp$year, y_rep[s,], type="l", ylab="", xlab="", yaxs="i",
+        ylim=c(0, max(unemp$y)*1.05), xaxt="n", yaxt="n", bty="l", main=paste("Simulation", s))
+  axis(1, seq(1950,2010,10), rep("",7))
+  axis(2, seq(0,10), rep("",11))
+}
+
+
+## Numerical posterior predictive check
+test <- function (y){
+  n <- length(y)
+  y_lag <- c(NA, y[1:(n-1)])
+  y_lag_2 <- c(NA, NA, y[1:(n-2)])
+  return(sum(sign(y-y_lag) != sign(y_lag-y_lag_2), na.rm=TRUE))
+}
+test_y <- test(unemp$y)
+test_rep <- apply(y_rep, 1, test)
+print(mean(test_rep > test_y))
+print(quantile(test_rep, c(.1,.5,.9)))
+
+
+
+
+
+
+
+
