@@ -203,17 +203,61 @@ fit_1
 predicted <- predict(fit_1)
 resid <- introclass$final - predicted
 
-plot(predicted, resid, xlab="predicted value", ylab="residual",
-     main="Residuals vs.\ predicted values", mgp=c(1.5,.5,0), pch=20, yaxt="n")
+plot(predicted, 
+     resid, 
+     xlab="predicted value", 
+     ylab="residual",
+     main="Residuals vs.\ predicted values", 
+     mgp=c(1.5,.5,0), 
+     pch=20, 
+     yaxt="n")
 axis(2, seq(-40,40,20), mgp=c(1.5,.5,0))
 abline(0, 0, col="gray", lwd=.5)
 
 
-plot(introclass$final, resid, xlab="observed value", ylab="residual", main="Residuals vs.\ observed values", mgp=c(1.5,.5,0), pch=20, yaxt="n")
+plot(introclass$final, 
+     resid, 
+     xlab="observed value", 
+     ylab="residual", 
+     main="Residuals vs.\ observed values", 
+     mgp=c(1.5,.5,0), 
+     pch=20, 
+     yaxt="n")
 axis(2, seq(-40,40,20), mgp=c(1.5,.5,0))
 abline(0, 0, col="gray", lwd=.5)
 
 
+## Simulated fake data ---------------------------------------------------------
+a <- 65
+b <- 0.7
+sigma <- 15
+n <- nrow(introclass)
+introclass$final_fake <- a + b*introclass$midterm + rnorm(n, 0, 15)
+fit_fake <- stan_glm(final_fake ~ midterm, data = introclass)
 
+predicted_fake <- predict(fit_fake)
+resid_fake <- introclass$final_fake - predicted_fake
+
+plot(predicted_fake, 
+     resid_fake, 
+     xlab="predicted value", 
+     ylab="residual", 
+     main="Fake data:  resids vs.\ predicted", 
+     mgp=c(1.5,.5,0), 
+     pch=20, 
+     yaxt="n")
+axis(2, seq(-40,40,20), mgp=c(1.5,.5,0))
+abline(0, 0, col="gray", lwd=.5)
+
+plot(introclass$final_fake, 
+     resid_fake, 
+     xlab="observed value", 
+     ylab="residual", 
+     main="Fake data:  resids vs.\ observed", 
+     mgp=c(1.5,.5,0), 
+     pch=20, 
+     yaxt="n")
+axis(2, seq(-40,40,20), mgp=c(1.5,.5,0))
+abline(0, 0, col="gray", lwd=.5)
 
 
