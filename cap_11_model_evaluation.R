@@ -261,3 +261,41 @@ axis(2, seq(-40,40,20), mgp=c(1.5,.5,0))
 abline(0, 0, col="gray", lwd=.5)
 
 
+
+# Comparing data to replications from a fitted model ---------------------------
+URL <- "https://raw.githubusercontent.com/avehtari/ROS-Examples/master/Newcomb/data/newcomb.txt"
+newcomb <- read.table(URL, header=TRUE)
+
+fit <- stan_glm(y ~ 1, data=newcomb)
+fit
+
+hist(newcomb$y, main=NULL, ylab="", xlab="", yaxt="n", breaks=30)
+
+library("bayesplot")
+mcmc_hist(newcomb, pars="y") + xlab("")
+
+# simulate
+sims <- as.matrix(fit)
+n_sims <- nrow(sims)
+n <- length(newcomb$y)
+y_rep <- array(NA, c(n_sims, n))
+for (s in 1:n_sims){
+  y_rep[s,] <- rnorm(n, sims[s,1], sims[s,2])
+}
+
+par(mfrow=c(4,5), mar=rep(2,4))
+for (s in sample(n_sims, 20)) {
+  hist(y_rep[s,], main=NULL, ylab="", xlab="", yaxt="n") 
+}
+
+
+# simulate using built-in function
+y_rep <- posterior_predict(fit)
+ppc_hist(newcomb$y, y_rep[1:19, ], binwidth = 8)
+
+
+
+
+
+
+
