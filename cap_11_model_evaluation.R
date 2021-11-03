@@ -344,3 +344,24 @@ print(quantile(test_rep, c(.1,.5,.9)))
 
 
 
+
+
+# Residual standard deviation and explained variance R^2 -----------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
