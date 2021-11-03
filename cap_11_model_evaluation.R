@@ -194,6 +194,18 @@ for (i in 0:1){
 
 
 # Residual plots ---------------------------------------------------------------
+URL <- "https://raw.githubusercontent.com/avehtari/ROS-Examples/master/Introclass/data/gradesW4315.dat"
+introclass <- read.table(file=URL, header=TRUE)
+
+fit_1 <- stan_glm(final ~ midterm, data=introclass)
+fit_1
+
+predicted <- predict(fit_1)
+resid <- introclass$final - predicted
+
+
+
+
 
 
 
