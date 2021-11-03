@@ -203,7 +203,15 @@ fit_1
 predicted <- predict(fit_1)
 resid <- introclass$final - predicted
 
+plot(predicted, resid, xlab="predicted value", ylab="residual",
+     main="Residuals vs.\ predicted values", mgp=c(1.5,.5,0), pch=20, yaxt="n")
+axis(2, seq(-40,40,20), mgp=c(1.5,.5,0))
+abline(0, 0, col="gray", lwd=.5)
 
+
+plot(introclass$final, resid, xlab="observed value", ylab="residual", main="Residuals vs.\ observed values", mgp=c(1.5,.5,0), pch=20, yaxt="n")
+axis(2, seq(-40,40,20), mgp=c(1.5,.5,0))
+abline(0, 0, col="gray", lwd=.5)
 
 
 
