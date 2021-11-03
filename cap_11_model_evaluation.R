@@ -274,26 +274,15 @@ hist(newcomb$y, main=NULL, ylab="", xlab="", yaxt="n", breaks=30)
 library("bayesplot")
 mcmc_hist(newcomb, pars="y") + xlab("")
 
-# simulate
-sims <- as.matrix(fit)
-n_sims <- nrow(sims)
-n <- length(newcomb$y)
-y_rep <- array(NA, c(n_sims, n))
-for (s in 1:n_sims){
-  y_rep[s,] <- rnorm(n, sims[s,1], sims[s,2])
-}
-
-par(mfrow=c(4,5), mar=rep(2,4))
-for (s in sample(n_sims, 20)) {
-  hist(y_rep[s,], main=NULL, ylab="", xlab="", yaxt="n") 
-}
-
-
 # simulate using built-in function
 y_rep <- posterior_predict(fit)
 ppc_hist(newcomb$y, y_rep[1:19, ], binwidth = 8)
 
+# Plot kernel density estimate of data and 100 replications using built-in function
+ppc_dens_overlay(newcomb$y, y_rep[1:100, ]) + scale_y_continuous(breaks=NULL)
 
+# Plot test statistic for data and replicates using built-in function
+ppc_stat(newcomb$y, y_rep, stat = "min", binwidth = 2)
 
 
 
