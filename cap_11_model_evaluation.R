@@ -347,11 +347,28 @@ print(quantile(test_rep, c(.1,.5,.9)))
 
 
 # Residual standard deviation and explained variance R^2 -----------------------
+# fake data
+x <- 1:5 - 3
+y <- c(1.7, 2.6, 2.5, 4.4, 3.8) - 3
+xy <- data.frame(x,y)
+
+# MLE model
+fit <- lm(y ~ x, data = xy)
+ols_coef <- coef(fit)
+yhat <- ols_coef[1] + ols_coef[2] * x
+r <- y - yhat
+rsq_1 <- var(yhat)/(var(y))
+rsq_2 <- var(yhat)/(var(yhat) + var(r))
+round(c(rsq_1, rsq_2), 3)
 
 
-
-
-
+# Bayes model
+fit_bayes <- stan_glm(y ~ x, data = xy,
+                      prior_intercept = normal(0, 0.2, autoscale = FALSE),
+                      prior = normal(1, 0.2, autoscale = FALSE),
+                      prior_aux = NULL
+)
+round(median(bayesR2<-bayes_R2(fit_bayes)), 2)
 
 
 
