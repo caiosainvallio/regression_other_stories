@@ -390,7 +390,7 @@ print(loo_3)
 # from the posterior distribution.
 
 # elpd_loo is the estimated log score along with a standard error representing
-# uncertainty due to using only 434 data points.
+# uncertainty due to using only 434 data points.## quanto menor melhor!!!
 
 # p_loo is the estimated “effective number of parameters” in the model. The 
 # above model has 4 parameters, so it makes sense that p_loo is close to 4 here, 
@@ -415,10 +415,4 @@ loo_compare(loo_3, loo_1) # difference of 38.9
 fit_4 <- stan_glm(kid_score ~ mom_hs + mom_iq + mom_hs:mom_iq, data=kidiq)
 loo_4 <- loo(fit_4)
 loo_compare(loo_3, loo_4)
-
-
-
-
-
-
 
