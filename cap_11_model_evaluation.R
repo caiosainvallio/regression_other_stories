@@ -368,13 +368,53 @@ fit_bayes <- stan_glm(y ~ x, data = xy,
                       prior = normal(1, 0.2, autoscale = FALSE),
                       prior_aux = NULL
 )
-round(median(bayesR2<-bayes_R2(fit_bayes)), 2)
+round(median(bayes_R2(fit_bayes)), 2)
 
 
 
 
 
 
+
+# Cross validation -------------------------------------------------------------
+# data set
+data("kidiq")
+fit_3 <- stan_glm(kid_score ~ mom_hs + mom_iq, data=kidiq)
+fit_3
+loo_3 <- loo(fit_3)
+print(loo_3)
+
+
+# The “log-likelihood matrix” is log p(y_i|x_i, beta, sigma) 
+# at n = 434 data points (x_i, y_i) using 4000 draws of beta and sigma 
+# from the posterior distribution.
+
+# elpd_loo is the estimated log score along with a standard error representing
+# uncertainty due to using only 434 data points.
+
+# p_loo is the estimated “effective number of parameters” in the model. The 
+# above model has 4 parameters, so it makes sense that p_loo is close to 4 here, 
+# but in the case of models with stronger prior information, weaker data, or 
+# model misspecification, this direct identification will not always work.
+
+# looic is the LOO information criterion, −2 elpd_loo, which we compute for 
+# comparability to deviance.
+
+# The Monte Carlo SE of elpd_loo gives the uncertainty of the estimate based 
+# on the posterior simulations. If the number of simulations is large enough, 
+# this Monte Carlo SE will approach zero, in contrast to the standard errors 
+# of epld_loo, p_loo, and looic, whose uncertainties drive
+# from the finite number of data points in the regression.
+
+fit_1 <- stan_glm(kid_score ~ mom_hs, data=kidiq)
+loo_1 <- loo(fit_1)
+print(loo_1)
+loo_compare(loo_3, loo_1) # difference of 38.9
+
+# Differences smaller than 4 are hard to distinguish from noise:
+fit_4 <- stan_glm(kid_score ~ mom_hs + mom_iq + mom_hs:mom_iq, data=kidiq)
+loo_4 <- loo(fit_4)
+loo_compare(loo_3, loo_4)
 
 
 
