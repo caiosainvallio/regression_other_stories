@@ -81,5 +81,22 @@ print(logmodel_2, digits = 3)
 
 
 
+# Log-log model: transforming the input and outcome variables ------------------
+# The coefficient can be interpreted as the expected proportional difference 
+# in y per proportional difference in x.
+earnings$log_height <- log(earnings$height)
+logmodel_5 <- stan_glm(log(earn) ~ log_height + male, 
+                       data=earnings, subset=earn>0)
+
+# For each 1% difference in height, the predicted difference in earnings is 1.62%. 
+# The other input, male, is categorical so it does not make sense to take its 
+# logarithm. In economics, the coefficient in a log-log model is sometimes 
+# called an “elasticity”.
+
+
+
+
+
+
 
 
