@@ -23,7 +23,7 @@ invlogit(coef(fit_1)[1] + coef(fit_1)[2]*mean(nes92$income))
 plogis(coef(fit_1)[1] + coef(fit_1)[2]*mean(nes92$income))
 
 # A difference of 1 in income (on this 1–5 scale) corresponds to a positive 
-# difference of 0.33 in the logit probability of supporting Bush.
+# difference of 0.23 in the logit probability of supporting Bush.
 
 
 # log(odds) interpretation
@@ -35,7 +35,7 @@ exp(0.232)
 
 # Predictions and comparisons --------------------------------------------------
 
-## Point prediction using predict ----------------------------------------------
+## Point prediction using `predict` --------------------------------------------
 new <- data.frame(income=5)
 
 # probability scale
@@ -59,7 +59,7 @@ invlogit(predict(fit_1, type="link", newdata=new))
 
 
 
-## Linear predictor with uncertainty using posterior_linpred -------------------
+## Linear predictor with uncertainty using `posterior_linpred` -----------------
 # the function posterior_linpred yields simulation draws for the linear
 # predictor, X_new*beta
 
@@ -70,9 +70,57 @@ print(c(mean(linpred), sd(linpred)))
 
 
 
-## Expected outcome with uncertainty using posterior_epred ---------------------
+
+
+
+## Expected outcome with uncertainty using `posterior_epred` -------------------
 
 # probability scale
 epred <- posterior_epred(fit_1, newdata=new)
 median(epred)
 print(c(mean(epred), sd(epred)))
+
+
+
+
+## Predictive distribution for a new observation using `posterior_predict` -----
+postpred <- posterior_predict(fit_1, newdata=new)
+mean(postpred)
+
+
+
+
+# Prediction given a range of input values -------------------------------------
+new <- data.frame(income=1:5)
+pred <- predict(fit_1, type="response", newdata=new)
+linpred <- posterior_linpred(fit_1, newdata=new)
+epred <- posterior_epred(fit_1, newdata=new)
+postpred <- posterior_predict(fit_1, newdata=new)
+
+
+# We can use epred to make statements about the population. For example, this 
+# will compute the posterior probability, according to the fitted model, that 
+# Bush was more popular among people with income level 5 than among people with 
+# income level 4.
+mean(epred[,5] > epred[,4])
+
+# And this will compute a 95% posterior distribution for the difference in 
+# support for Bush, comparing people in the richest to the second-richest 
+# category:
+quantile(epred[,5] - epred[,4], c(0.025, 0.975))
+
+
+# We can use `postpred` to make statements about individual people. For example,
+# this will compute the posterior simulations of the number of these new 
+# survey respondents who support Bush:
+total <- apply(postpred, 1, sum)
+
+
+# And here is how to compute the probability that at least three of 
+# them support Bush:
+mean(total >= 3)
+
+
+
+
+
