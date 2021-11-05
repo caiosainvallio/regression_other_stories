@@ -37,6 +37,8 @@ exp(0.232)
 
 ## Point prediction using predict ----------------------------------------------
 new <- data.frame(income=5)
+
+# probability scale
 # specified type="response" to get the prediction on the probability scale
 pred <- predict(fit_1, type="response", newdata=new)
 pred
@@ -45,13 +47,32 @@ pred
 invlogit(-0.687 + 0.232*5)
 
 
+# log(odds) scale
 # type="link" to get the estimated linear predictor, 
 # the prediction on the logit scale. y=log(odds)
 predict(fit_1, type="link", newdata=new)
-
 
 # to revert in probabilities
 invlogit(predict(fit_1, type="link", newdata=new))
 
 
 
+
+
+## Linear predictor with uncertainty using posterior_linpred -------------------
+# the function posterior_linpred yields simulation draws for the linear
+# predictor, X_new*beta
+
+# log(odds) scale
+linpred <- posterior_linpred(fit_1, newdata=new)
+median(linpred)
+print(c(mean(linpred), sd(linpred)))
+
+
+
+## Expected outcome with uncertainty using posterior_epred ---------------------
+
+# probability scale
+epred <- posterior_epred(fit_1, newdata=new)
+median(epred)
+print(c(mean(epred), sd(epred)))
