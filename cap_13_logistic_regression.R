@@ -15,7 +15,7 @@ plot(nes92$income, nes92$rvote)
 curve(invlogit(coef(fit_1)[1] + coef(fit_1)[2]*x), add=TRUE)
 
 
-# probabilidade usando a média de income
+# Probability interpretation
 invlogit(-0.687 + 0.232*mean(nes92$income))
 plogis(-0.687 + 0.232*mean(nes92$income))
 
@@ -25,7 +25,33 @@ plogis(coef(fit_1)[1] + coef(fit_1)[2]*mean(nes92$income))
 # A difference of 1 in income (on this 1–5 scale) corresponds to a positive 
 # difference of 0.33 in the logit probability of supporting Bush.
 
+
 # log(odds) interpretation
 exp(0.232)
+
+
+
+
+
+# Predictions and comparisons --------------------------------------------------
+
+## Point prediction using predict ----------------------------------------------
+new <- data.frame(income=5)
+# specified type="response" to get the prediction on the probability scale
+pred <- predict(fit_1, type="response", newdata=new)
+pred
+
+# or directly
+invlogit(-0.687 + 0.232*5)
+
+
+# type="link" to get the estimated linear predictor, 
+# the prediction on the logit scale. y=log(odds)
+predict(fit_1, type="link", newdata=new)
+
+
+# to revert in probabilities
+invlogit(predict(fit_1, type="link", newdata=new))
+
 
 
