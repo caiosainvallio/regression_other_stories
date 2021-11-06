@@ -121,3 +121,26 @@ total <- apply(postpred, 1, sum)
 mean(total >= 3)
 
 
+
+
+
+
+
+# Building a logistic regression model -----------------------------------------
+# libraries
+library(rstanarm)
+library(ggplot2)
+
+# data
+URL = "https://raw.githubusercontent.com/avehtari/ROS-Examples/master/Arsenic/data/wells.csv"
+wells <- read.csv(URL)
+
+
+
+
+
+
+
+
+
+
