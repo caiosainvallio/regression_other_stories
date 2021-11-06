@@ -121,6 +121,3 @@ total <- apply(postpred, 1, sum)
 mean(total >= 3)
 
 
-
-
-
