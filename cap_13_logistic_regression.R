@@ -126,7 +126,7 @@ mean(total >= 3)
 
 
 
-# Building a logistic regression model -----------------------------------------
+# Building a logistic regression model: wells in Bangladesh --------------------
 # libraries
 library(rstanarm)
 library(ggplot2)
@@ -136,11 +136,80 @@ URL = "https://raw.githubusercontent.com/avehtari/ROS-Examples/master/Arsenic/da
 wells <- read.csv(URL)
 
 
+## Logistic regression with just one predictor ---------------------------------
+fit_1 <- stan_glm(switch ~ dist, family=binomial(link="logit"), data=wells)
+print(fit_1, digits=3)
+(loo1 <- loo(fit_1))
+# plot distributuion
+hist(wells$dist, breaks=seq(0,10+max(wells$dist),10), freq=TRUE,
+     xlab="Distance (in meters) to nearest safe well", ylab="", main="", mgp=c(2,.5,0))
+
+
+
+
+# rescale
+wells$dist100 <- wells$dist/100
+fit_2 <- stan_glm(switch ~ dist100, 
+                  family = binomial(link = "logit"), 
+                  data=wells)
+print(fit_2, digits=2)
+(loo2 <- loo(fit_2, save_psis = TRUE))
+
+
+
+
+## plot modelo fit -------------------------------------------------------------
+jitter_binary <- function(a, jitt=.05){
+  a + (1-2*a)*runif(length(a),0,jitt)
+}
+
+plot(c(0,max(wells$dist, na.rm=TRUE)*1.02), c(0,1),
+     xlab="Distance (in meters) to nearest safe well", ylab="Pr (switching)",
+     type="n", xaxs="i", yaxs="i", mgp=c(2,.5,0))
+curve(invlogit(coef(fit_1)[1]+coef(fit_1)[2]*x), lwd=1, add=TRUE)
+points(wells$dist, jitter_binary(wells$switch), pch=20, cex=.1)
+
+
+## Interpreting the logistic regression coefficients ---------------------------
+
+# P(swich) = logit^{-1}(0.61 - 0.62*dist100)
+
+
+# The constant term can be interpreted when dist100 = 0, in which case the
+# probability of switching is logit^{-1}(0.61) = 0.65.Thus, the model estimates
+# a 65% probability of switching if you live right next to an existing safe well.
 
 
 
 
 
+## Adding a second input variable ----------------------------------------------
+fit_3 <- stan_glm(switch ~ dist100 + arsenic, 
+                  family = binomial(link = "logit"),
+                  data=wells)
+print(fit_3, digits=2)
+(loo3 <- loo(fit_3, save_psis = TRUE))
 
 
 
+
+plot(c(0,max(wells$dist,na.rm=T)*1.02), c(0,1),
+     xlab="Distance (in meters) to nearest safe well", ylab="Pr (switching)",
+     type="n", xaxs="i", yaxs="i", mgp=c(2,.5,0))
+points(wells$dist, jitter_binary(wells$switch), pch=20, cex=.1)
+curve(invlogit(coef(fit_3)[1]+coef(fit_3)[2]*x/100+coef(fit_3)[3]*.50), lwd=.5, add=T)
+curve(invlogit(coef(fit_3)[1]+coef(fit_3)[2]*x/100+coef(fit_3)[3]*1.00), lwd=.5, add=T)
+text(50, .27, "if As = 0.5", adj=0, cex=.8)
+text(75, .50, "if As = 1.0", adj=0, cex=.8)
+
+
+
+
+plot(c(0,max(wells$arsenic,na.rm=T)*1.02), c(0,1),
+     xlab="Arsenic concentration in well water", ylab="Pr (switching)",
+     type="n", xaxs="i", yaxs="i", mgp=c(2,.5,0))
+points(wells$arsenic, jitter_binary(wells$switch), pch=20, cex=.1)
+curve(invlogit(coef(fit_3)[1]+coef(fit_3)[2]*0+coef(fit_3)[3]*x), from=0.5, lwd=.5, add=T)
+curve(invlogit(coef(fit_3)[1]+coef(fit_3)[2]*0.5+coef(fit_3)[3]*x), from=0.5, lwd=.5, add=T)
+text(.5, .78, "if dist = 0", adj=0, cex=.8)
+text(2, .6, "if dist = 50", adj=0, cex=.8)
