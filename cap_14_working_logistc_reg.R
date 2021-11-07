@@ -105,7 +105,9 @@ print(fit_4, digits=2)
 
 
 ## Constant term -----------------------------------------
-invlogit(-0.15) # 0.462
+print(fit_4, digits=2)
+coef(fit_4)[1] # -0.15
+invlogit(coef(fit_4)[1]) # 0.462
 
 # 0.463 is the estimated probability of switching, if the distance
 # to the nearest safe well is 0 and the arsenic level of the current well is 0.
@@ -117,7 +119,12 @@ invlogit(-0.15) # 0.462
 # `dist100` = 0.48 and `arsenic` = 1.66, where the probability of switching 
 # is logit^{−1}(−0.15 − 0.58 ∗ 0.48 + 0.56 ∗ 1.66 − 0.18 ∗ 0.48 ∗ 1.66) = 0.59.
 #
-invlogit(-0.15 - 0.58*0.48 + 0.56*1.66 - 0.18*0.48*1.66) # 0.59
+invlogit(
+  coef(fit_4)[1]            # Intercept
++ coef(fit_4)[2]*0.48       # dist100
++ coef(fit_4)[3]*1.66       # arsenic
++ coef(fit_4)[4]*0.48*1.66  # dist100:arsenic
+) # 0.59
 # na media, 59% das pessoas irao se mudar
 
 ## In term of odd ratio
@@ -126,6 +133,36 @@ exp(-0.15) # 0.86
 0.46/(1-0.46) # 0.85
 exp(-0.15 - 0.58*0.48 + 0.56*1.66 - 0.18*0.48*1.66) # 1.43
 # na media, a taxa de mudanca é de 1.43
+
+
+
+## Coefficient for distance -----------------------------------------
+print(fit_4, digits=2)
+coef(fit_4)[2] # -0.57
+invlogit(coef(fit_4)[2]) # 0.36
+
+# this corresponds to comparing two wells that differ by 1 in `dist100`, 
+# if the arsenic level is 0 for both wells.
+# 
+# Once again, we should not try to interpret this.
+# 
+# Instead, we can look at the average value, arsenic = 1.66, where distance 
+# has a coefficient of 
+coef(fit_4)[2] + coef(fit_4)[4]*1.66 # -0.872 on the logit scale.
+# 
+# To quickly interpret this on the probability scale, we divide by 4: 
+-0.872/4 # -0.218. 
+# 
+# Thus, at the mean level of arsenic in the data, each 100 meters of
+# distance corresponds to an approximate 22% negative difference in
+# probability of switching.
+
+
+
+
+
+
+
 
 
 
