@@ -84,3 +84,51 @@ abline((logit(0.1) - beta[1])/beta[3], -beta[2]/beta[3],  lty=2)
 
 
 
+
+
+
+
+# Logistic regression with interactions ----------------------------------------
+
+library("rstanarm")
+options(mc.cores = parallel::detectCores())
+logit <- qlogis
+invlogit <- plogis
+
+# data
+URL = "https://raw.githubusercontent.com/avehtari/ROS-Examples/master/Arsenic/data/wells.csv"
+wells <- read.csv(URL)
+
+fit_4 <- stan_glm(switch ~ dist100 + arsenic + dist100:arsenic,
+                  family=binomial(link="logit"), data=wells)
+print(fit_4, digits=2)
+
+
+## Constant term -----------------------------------------
+invlogit(-0.15) # 0.462
+
+# 0.463 is the estimated probability of switching, if the distance
+# to the nearest safe well is 0 and the arsenic level of the current well is 0.
+# 
+# This is an impossible condition (since arsenic levels all exceed 0.5 in 
+# our set of unsafe wells), so we do not try to interpret the constant term.
+# 
+# Instead, we can evaluate the prediction at the average values of 
+# `dist100` = 0.48 and `arsenic` = 1.66, where the probability of switching 
+# is logit^{−1}(−0.15 − 0.58 ∗ 0.48 + 0.56 ∗ 1.66 − 0.18 ∗ 0.48 ∗ 1.66) = 0.59.
+#
+invlogit(-0.15 - 0.58*0.48 + 0.56*1.66 - 0.18*0.48*1.66) # 0.59
+# na media, 59% das pessoas irao se mudar
+
+## In term of odd ratio
+exp(-0.15) # 0.86
+# as same as
+0.46/(1-0.46) # 0.85
+exp(-0.15 - 0.58*0.48 + 0.56*1.66 - 0.18*0.48*1.66) # 1.43
+# na media, a taxa de mudanca é de 1.43
+
+
+
+
+
+
