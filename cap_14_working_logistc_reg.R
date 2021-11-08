@@ -210,9 +210,52 @@ invlogit(coef(fit_4)[4]) # 0.45
 
 
 
+# Centering the input variables ------------------------------------------------
+wells$c_dist100 <- wells$dist100 - mean(wells$dist100)
+wells$c_arsenic <- wells$arsenic - mean(wells$arsenic)
+fit_5 <- stan_glm(switch ~ c_dist100 + c_arsenic + c_dist100:c_arsenic,
+                  family=binomial(link="logit"), data=wells)
+print(fit_5, digits=2)
+
+## Constant term----------------------------------------------------------------
+# logit−1(0.35) = 0.59 is the estimated probability of switching,
+# if c_dist100 = c_arsenic = 0, that is, if distance to nearest safe well and 
+# arsenic level are at their averages in the data. 
+invlogit(coef(fit_5)[1])
+# 
+# We obtained this same calculation, but with more effort, from our earlier
+# model with uncentered inputs.
 
 
 
+## Coefficient for distance ----------------------------------------------------
+# this is the coefficient for distance (on the logit scale) if arsenic level
+# is at its average value.
+# 
+# To quickly interpret this on the probability scale, we divide by 4: 
+-0.88/4 # -0.22.
+# 
+# Thus, at the mean level of arsenic in the data, each 100 meters of distance 
+# corresponds to an approximate 22% negative difference in probability of 
+# switching.
+
+
+
+# Coefficient for arsenic-------------------------------------------------------
+#
+# this is the coefficient for arsenic level if distance to nearest safe
+# well is at its average value. To quickly interpret this on the probability 
+# scale, we divide by 4: 
+0.47/4 # 0.12.
+#
+# Thus, at the mean level of distance in the data, each additional unit of 
+# arsenic corresponds to an approximate 12% positive difference in probability 
+# of switching.
+
+
+
+## Coefficient for the interaction term ----------------------------------------
+# this is unchanged by centering and has the same interpretation as before.
 
 
 
