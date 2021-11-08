@@ -260,12 +260,18 @@ invlogit(coef(fit_5)[1])
 
 
 
+# Statistical significance of the interaction ----------------------------------
+
+loo4 <- loo(fit_4)
+loo5 <- loo(fit_5)
+loo_compare(loo4, loo5)
+# Nao tem diferenca, pode retirar essa feature do modelo
 
 
 
-
-
-
+# we refer to “coefficients” and “differences,” rather than to “effects”
+# and “changes,” because the observational nature of the data makes it 
+# difficult to directly interpret the regression model causally.
 
 
 
