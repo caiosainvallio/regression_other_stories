@@ -275,4 +275,8 @@ loo_compare(loo4, loo5)
 
 
 
+# logistic regressions are nonlinear on the probability scale and linear on the 
+# logit scale. This is because logistic regression is linear in the
+# parameters but nonlinear in the relation of inputs to outcome. 
+
 
