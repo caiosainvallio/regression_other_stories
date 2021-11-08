@@ -159,7 +159,10 @@ coef(fit_4)[2] + coef(fit_4)[4]*1.66 # -0.872 on the logit scale.
 
 
 
-
+## Coefficient for arsenic -----------------------------------------------------
+print(fit_4, digits=2)
+coef(fit_4)[3] # 0.55
+invlogit(coef(fit_4)[3]) # 0.63
 
 
 
