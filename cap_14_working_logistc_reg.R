@@ -164,6 +164,61 @@ print(fit_4, digits=2)
 coef(fit_4)[3] # 0.55
 invlogit(coef(fit_4)[3]) # 0.63
 
+# this corresponds to comparing two wells that differ by 1 in arsenic,
+# if the distance to the nearest safe well is 0 for both.
+# 
+# Again, this is not so interpretable, so instead we evaluate the comparison 
+# at the average value for distance, `dist100` = 0.48, where arsenic has a 
+# coefficient of 
+coef(fit_4)[3] + coef(fit_4)[4]*0.48 # 0.47
+0.56 - 0.18 * 0.48 # 0.47 
+# on the logit scale. 
+# 
+# To quickly interpret this on the probability scale, we divide by 4: 
+0.47/4 # 0.12.
+# 
+# Thus, at the mean level of distance in the data, each additional unit of 
+# arsenic corresponds to an approximate 12% positive difference in probability 
+# of switching.
+
+
+
+## Coefficient for the interaction term ----------------------------------------
+print(fit_4, digits=2)
+coef(fit_4)[4] # -0.18
+invlogit(coef(fit_4)[4]) # 0.45
+
+# this can be interpreted in two ways. 
+# 
+# Looking from one direction, for each additional unit of arsenic, the 
+# value −0.18 is added to the coefficient for distance.
+# 
+# We have already seen that the coefficient for distance is -0.88 at the 
+# average level of arsenic, and so we can understand the interaction as saying 
+# that the importance of distance as a predictor increases for households with 
+# higher existing arsenic levels.
+# 
+# Looking at it the other way, for each additional 100 meters of distance to 
+# the nearest well, the value -0.18 is added to the coefficient for arsenic. 
+# 
+# We have already seen that the coefficient for distance is 0.47 at the average
+# distance to nearest safe well, and so we can understand the interaction as 
+# saying that the importance of arsenic as a predictor decreases for households
+# that are farther from existing safe wells.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
