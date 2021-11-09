@@ -47,7 +47,6 @@ for (k in 1:K) {
 
 
 # Diff Poisson and Neg-Binomial ------------------------------------------------
-library("brms")
 library("loo")
 library("ggplot2")
 library("bayesplot")
@@ -111,3 +110,50 @@ pbg
 
 
 
+
+
+# Logistic-binomial model ------------------------------------------------------
+# We first simulate N = 100 players each shooting n = 20 shots, where the 
+# probability of a successful shot is a linear function of height (30% for a
+# 5'9" player, 40% for a 6' tall player, and so forth):
+
+N <- 100
+height <- rnorm(N, 72, 3)
+p <- 0.4 + 0.1*(height - 72)/3
+n <- rep(20, N)
+y <- rbinom(N, n, p)
+data <- data.frame(n=n, y=y, height=height)
+
+
+fit_1a <- stan_glm(cbind(y, n-y) ~ height, 
+                   family=binomial(link="logit"),
+                   data=data)
+print(fit_1a)
+
+
+
+
+
+
+# Zero-inflated negative-binomial model ----------------------------------------
+library("brms")
+roaches$logp1_roach1 <- log(roaches$roach1+1)
+roaches$log_exposure2 <- log(roaches$exposure2)
+
+fit_3 <- brm(bf(y ~ logp1_roach1 + treatment + senior + offset(log_exposure2),
+                zi ~ logp1_roach1 + treatment + senior + offset(log_exposure2)),
+             family=zero_inflated_negbinomial(), data=roaches,
+             prior=set_prior("normal(0,1)"), seed=SEED, refresh=500)
+
+print(fit_3)
+loo_3 <- loo(fit_3)
+loo_compare(loo_1, loo_3)
+
+yrep_3 <- posterior_predict(fit_3)
+ppc_3 <- ppc_dens_overlay(log10(roaches$y+1), log10(yrep_3[sims_display,]+1))+
+  xlab('log10(y+1)') +
+  theme(axis.line.y = element_blank())
+ppc_3
+
+ppc_stat(y=roaches$y, yrep=yrep_3, stat=function(y) mean(y==0))
+ppc_stat(y=roaches$y, yrep=yrep_3, stat=function(y) quantile(y, probs=0.95))
