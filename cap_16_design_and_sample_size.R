@@ -27,6 +27,15 @@ n*.75 # in the cont group
 
 
 ## The 2.8 ---------------------------------------------------------------------
+# To find the value of n such that exactly 80% of the estimates will be at 
+# least 1.96 standard errors from 0.5, we need:
+# 
+# 0.5 + 1.96*s.e. = 0.6 - 0.84*s.e.
+# 
+# Some algebra then yields (1.96 + 0.84) * s.e. = 0.1.
+# 
+# We can then substitute s.e. = 0.5/sqrt(n) and solve for n.
+# 
 # In summary, to have 80% power, the true value of the parameter must be 2.8 
 # standard errors away from the comparison point: the value 2.8 is 1.96 from 
 # the 95% interval, plus 0.84 to reach the 80th percentile of the normal 
@@ -35,15 +44,14 @@ n*.75 # in the cont group
 
 
 # Estimates of means -----------------------------------------------------------
-
-# Teh quick estimete of Theta is the sample mena, y_hat, wich has a sttandard
+# The quick estimate of Theta is the sample mean, y_hat, which has a standard
 # error of Sigma/sqrt(n), where Sigma is the standard deviation of y in the 
 # population. 
 
-# If the goal is to acheive a specific s.e. for y_hat, then the sample size must
+# If the goal is to achieve a specific s.e. for y_hat, then the sample size must
 # be at least n = (Sigma/s.r.)^2.
 
-# If the goal is 89% power to distinguish Theta frm a specified value Theta_0,
+# If the goal is 89% power to distinguish Theta from a specified value Theta_0,
 # then a conservative required sample size is n = (2.8Sigma/(Theta - Theta_0))^2.
 
 # *2.8 standard errors from zero.
