@@ -45,7 +45,21 @@ qnorm(0.8) + qnorm(0.975)
 
 
 
-### The t distribution and uncertainty in standard deviations ------------------
+# Estimates of means -----------------------------------------------------------
+# The quick estimate of Theta is the sample mean, y_hat, which has a standard
+# error of Sigma/sqrt(n), where Sigma is the standard deviation of y in the 
+# population. 
+
+# If the goal is to achieve a specific s.e. for y_hat, then the sample size must
+# be at least n = (Sigma/s.r.)^2.
+
+# If the goal is 89% power to distinguish Theta from a specified value Theta_0,
+# then a conservative required sample size is n = (2.8Sigma/(Theta - Theta_0))^2.
+
+# *2.8 standard errors from zero.
+
+
+## The t distribution and uncertainty in standard deviations ------------------
 # 
 # For very small studies, though, degrees of freedom are low, the residual 
 # standard deviation is not estimated precisely from data, and inferential 
@@ -73,19 +87,38 @@ qt(0.8,10) + qt(0.975,10) # 3.1
 
 
 
+## Simple comparisons of means -------------------------------------------------
 
-# Estimates of means -----------------------------------------------------------
-# The quick estimate of Theta is the sample mean, y_hat, which has a standard
-# error of Sigma/sqrt(n), where Sigma is the standard deviation of y in the 
-# population. 
+# The standard error of y_hat_1 - y_hat_2 is sqrt(Sigma^2_1/n_1 + Sigma^2_2/n_2).
+# 
+# If we make a restriction n_1 = n_2 = n/2 (equal sample sizes in two groups),
+# the standard error becomes simply s.e. = sqrt(2*(Sigma^2_1 + Sigma^2_2)/n).
+# 
+# A specified standard error can the be attained with a sample size of 
+# n = 2*(Sigma^2_1 + Sigma^2_2)/(s.e.)^2.
+# 
+# If we further suppose that the variation is the same within each of the groups 
+# (Sigma_1 = Sigma_2 = Sigma), then s.e. = 2*Sigma/sqrt(n), and the required 
+# sample size is n = (2*Sigma/s.e.)^2.
+# 
+# If the goal is 80% power to detect a difference of Delta, with a stydy of 
+# size n, equally divided between the two groups, then the required sample 
+# size is n = 2*(Sigma^2_1 + Sigma^2_2)*(2.8/Delta)^2.
+# 
+# If Sigma_1 = Sigma_2 = Sigma, this a simplifies to (5.6*Sigma/Delta)^2.
+# 
+# The Delta is a standardized difference 
 
-# If the goal is to achieve a specific s.e. for y_hat, then the sample size must
-# be at least n = (Sigma/s.r.)^2.
 
-# If the goal is 89% power to distinguish Theta from a specified value Theta_0,
-# then a conservative required sample size is n = (2.8Sigma/(Theta - Theta_0))^2.
 
-# *2.8 standard errors from zero.
+
+
+
+
+
+
+
+
 
 
 
