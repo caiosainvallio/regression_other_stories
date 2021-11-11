@@ -41,6 +41,37 @@ n*.75 # in the cont group
 # the 95% interval, plus 0.84 to reach the 80th percentile of the normal 
 # distribution.
 
+qnorm(0.8) + qnorm(0.975)
+
+
+
+### The t distribution and uncertainty in standard deviations ------------------
+# 
+# For very small studies, though, degrees of freedom are low, the residual 
+# standard deviation is not estimated precisely from data, and inferential 
+# uncertainties (confidence intervals or posterior intervals) follow the t 
+# distribution. 
+# 
+# In that case, the value 2.8 needs to be replaced with a larger number to 
+# capture this additional source of uncertainty. 
+# 
+# For example, when designing a study comparing two groups of 6 patients each, 
+# the degrees of freedom are 10 (calculated as 12 data points minus two 
+# coefficients being estimated, and the normal distributions in the power 
+# calculations are replaced by t_10. 
+# 
+# In R, qnorm(0.8) + qnorm(0.975) yields the value 2.8, while qt(0.8,10) + 
+# qt(0.975,10) yields the value 3.1, so we would replace 2.8 by 3.1 in the 
+# calculations for 80% power. 
+# 
+# We usually don’t worry about the t correction because it is minor except
+# when sample sizes are very small.
+
+qnorm(0.8) + qnorm(0.975) # 2.8
+
+qt(0.8,10) + qt(0.975,10) # 3.1
+
+
 
 
 # Estimates of means -----------------------------------------------------------
