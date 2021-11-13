@@ -5,6 +5,7 @@
 prop_int <- 0.25 # 1/4
 prop_cont <- 0.75 # 3/4
 
+
 # Standard error of the difference
 sqrt(p_int*(1 - p_int)/(prop_int*n) + p_cont*(1 - p_cont)/(prop_cont*n))
 
@@ -26,6 +27,7 @@ n*.75 # in the cont group
 
 
 
+
 ## The 2.8 ---------------------------------------------------------------------
 # To find the value of n such that exactly 80% of the estimates will be at 
 # least 1.96 standard errors from 0.5, we need:
@@ -42,6 +44,7 @@ n*.75 # in the cont group
 # distribution.
 
 qnorm(0.8) + qnorm(0.975)
+
 
 
 
@@ -87,6 +90,7 @@ qt(0.8,10) + qt(0.975,10) # 3.1
 
 
 
+
 ## Simple comparisons of means -------------------------------------------------
 
 # The standard error of y_hat_1 - y_hat_2 is sqrt(Sigma^2_1/n_1 + Sigma^2_2/n_2).
@@ -108,22 +112,5 @@ qt(0.8,10) + qt(0.975,10) # 3.1
 # If Sigma_1 = Sigma_2 = Sigma, this a simplifies to (5.6*Sigma/Delta)^2.
 # 
 # The Delta is a standardized difference 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
