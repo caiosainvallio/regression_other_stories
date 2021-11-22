@@ -5,7 +5,6 @@
 prop_int <- 0.25 # 1/4
 prop_cont <- 0.75 # 3/4
 
-
 # Standard error of the difference
 sqrt(p_int*(1 - p_int)/(prop_int*n) + p_cont*(1 - p_cont)/(prop_cont*n))
 
@@ -24,7 +23,6 @@ n <- (2.8*1.15/0.10)^2
 
 n*.25 # in the int group
 n*.75 # in the cont group
-
 
 
 
@@ -47,17 +45,16 @@ qnorm(0.8) + qnorm(0.975)
 
 
 
-
 # Estimates of means -----------------------------------------------------------
 # The quick estimate of Theta is the sample mean, y_hat, which has a standard
 # error of Sigma/sqrt(n), where Sigma is the standard deviation of y in the 
 # population. 
 
 # If the goal is to achieve a specific s.e. for y_hat, then the sample size must
-# be at least n = (Sigma/s.r.)^2.
+# be at least n = (Sigma/s.e.)^2.
 
-# If the goal is 89% power to distinguish Theta from a specified value Theta_0,
-# then a conservative required sample size is n = (2.8Sigma/(Theta - Theta_0))^2.
+# If the goal is 80% power to distinguish Theta from a specified value Theta_0,
+# then a conservative required sample size is n = (2.8*Sigma/(Theta - Theta_0))^2.
 
 # *2.8 standard errors from zero.
 
@@ -90,16 +87,15 @@ qt(0.8,10) + qt(0.975,10) # 3.1
 
 
 
-
 ## Simple comparisons of means -------------------------------------------------
 
-# The standard error of y_hat_1 - y_hat_2 is sqrt(Sigma^2_1/n_1 + Sigma^2_2/n_2).
+# The standard error of y_hat_1 - y_hat_2 is sqrt(Sigma_1^2/n_1 + Sigma_2^2/n_2).
 # 
 # If we make a restriction n_1 = n_2 = n/2 (equal sample sizes in two groups),
-# the standard error becomes simply s.e. = sqrt(2*(Sigma^2_1 + Sigma^2_2)/n).
+# the standard error becomes simply s.e. = sqrt(2*(Sigma_1^2 + Sigma_2^2)/n).
 # 
 # A specified standard error can the be attained with a sample size of 
-# n = 2*(Sigma^2_1 + Sigma^2_2)/(s.e.)^2.
+# n = 2*(Sigma_1^2 + Sigma_2^2)/(s.e.)^2.
 # 
 # If we further suppose that the variation is the same within each of the groups 
 # (Sigma_1 = Sigma_2 = Sigma), then s.e. = 2*Sigma/sqrt(n), and the required 
@@ -112,5 +108,18 @@ qt(0.8,10) + qt(0.975,10) # 3.1
 # If Sigma_1 = Sigma_2 = Sigma, this a simplifies to (5.6*Sigma/Delta)^2.
 # 
 # The Delta is a standardized difference 
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
