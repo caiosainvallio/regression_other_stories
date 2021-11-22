@@ -15,6 +15,8 @@ sqrt(p_int*(1 - p_int)/(prop_int*n) + p_cont*(1 - p_cont)/(prop_cont*n))
 
 # n = (1.154/se)^2
 
+# se = Sigma/sqrt(n)
+
 # n to achieve 80% power to detect a difference of 10%, with 25% of the sample
 # size in one group and 75% in the other: p_int - p_cont > 10%
 
@@ -101,25 +103,11 @@ qt(0.8,10) + qt(0.975,10) # 3.1
 # (Sigma_1 = Sigma_2 = Sigma), then s.e. = 2*Sigma/sqrt(n), and the required 
 # sample size is n = (2*Sigma/s.e.)^2.
 # 
-# If the goal is 80% power to detect a difference of Delta, with a stydy of 
+# If the goal is 80% power to detect a difference of Delta, with a study of 
 # size n, equally divided between the two groups, then the required sample 
-# size is n = 2*(Sigma^2_1 + Sigma^2_2)*(2.8/Delta)^2.
+# size is n = 2*(Sigma_1^2 + Sigma_2^2)*(2.8/Delta)^2.
 # 
 # If Sigma_1 = Sigma_2 = Sigma, this a simplifies to (5.6*Sigma/Delta)^2.
 # 
 # The Delta is a standardized difference 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
